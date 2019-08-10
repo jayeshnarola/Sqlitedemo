@@ -10,7 +10,9 @@ import React, {Fragment} from 'react';
 import {SafeAreaView,StyleSheet,ScrollView,View,Text,StatusBar,} from 'react-native';
 import Appnavigation from './Appnavigation';
 
+
 const App = () => {
+  console.disableYellowBox = true
   return (
     <Fragment>
       <StatusBar barStyle="dark-content" />

@@ -161,7 +161,6 @@
 				7349C6743F8C2417CB458397 /* Pods-sqlitedemoTests.debug.xcconfig */,
 				6471C810F684DFB7F8481EB0 /* Pods-sqlitedemoTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
