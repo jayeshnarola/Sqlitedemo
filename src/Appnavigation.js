@@ -3,6 +3,8 @@ import categoryList from "./screens/categoryList";
 import AddNewCateogry from "./screens/addNewcategory";
 import React from "react";
 import { Image } from "react-native";
+import ExpenseList from "./screens/expenseList";
+import AddNewExpense from "./screens/addNewExpense";
 const TabNavigation = createBottomTabNavigator({
     CategoryList: {
         screen: createStackNavigator({
@@ -41,20 +43,20 @@ const TabNavigation = createBottomTabNavigator({
     },
     Expense: {
         screen: createStackNavigator({
-            categoryList: {
-                screen: categoryList,
+            expenseList: {
+                screen: ExpenseList,
                 navigationOptions: {
                     header: null
                 }
             },
-            addNewCategory: {
-                screen: AddNewCateogry,
+            addNewExpense: {
+                screen: AddNewExpense,
                 navigationOptions: {
                     header: null
                 }
             }
         },{
-            initialRouteName:'categoryList'
+            initialRouteName:'expenseList'
         }
         ),
         navigationOptions: ({ navigation, screenProps }) => ({
@@ -67,9 +69,9 @@ const TabNavigation = createBottomTabNavigator({
             ),
             tabBarOnPress: async (scene, jumpToIndex) => {
                 if (navigation.isFocused()) {
-                    navigation.navigate("Expense", { scrollTop: true });
+                    navigation.navigate("expenseList", { scrollTop: true });
                 } else {
-                    navigation.navigate("Expense");
+                    navigation.navigate("expenseList");
                 }
             }
         })

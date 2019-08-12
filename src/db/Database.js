@@ -43,6 +43,7 @@ export default class Database {
                       console.log("Database not yet ready ... populating data");
                       db.transaction((tx) => {
                           tx.executeSql('CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, cName TEXT NOT NULL, desc TEXT)');
+                          tx.executeSql('CREATE TABLE IF NOT EXISTS expenses (eId INTEGER PRIMARY KEY AUTOINCREMENT,cId INTEGER NOT NULL, eName TEXT NOT NULL, desc TEXT)');
                       }).then(() => {
                           console.log("Table created successfully");
                       }).catch(error => {
@@ -109,6 +110,39 @@ export default class Database {
         });  
       }
 
+
+      listExpense() {
+        return new Promise((resolve) => {
+          const expenses = [];
+          this.initDB().then((db) => {
+            db.transaction((tx) => {
+              tx.executeSql('SELECT eId, cId, eName, desc FROM expenses', []).then(([tx,results]) => {
+                console.log("Query completed");
+                var len = results.rows.length;
+                for (let i = 0; i < len; i++) {
+                  let row = results.rows.item(i);
+                  const { eId, cId, eName, desc } = row;
+                  expenses.push({
+                    eId,
+                    cId,
+                    eName,
+                    desc
+                  });
+                }
+                // console.log(expenses);
+                resolve(expenses);
+              });
+            }).then((result) => {
+              this.closeDatabase(db);
+            }).catch((err) => {
+              console.log(err);
+            });
+          }).catch((err) => {
+            console.log(err);
+          });
+        });  
+      }
+
     //   productById(id) {
     //     console.log(id);
     //     return new Promise((resolve) => {
@@ -149,6 +183,24 @@ export default class Database {
           });
         });  
       }
+      addExpense(expense) {
+        return new Promise((resolve) => {
+          this.initDB().then((db) => {
+            db.transaction((tx) => {
+              tx.executeSql('INSERT INTO expenses VALUES (?, ?, ?, ?)',[ null, expense.cId, expense.eName, expense.desc]).then(([tx, results]) => {
+                resolve(results);
+              });
+            }).then((result) => {
+              this.closeDatabase(db);
+            }).catch((err) => {
+              console.log(err);
+            });
+          }).catch((err) => {
+            console.log(err);
+          });
+        });  
+      }
+
 
       updateCategory(cateogry) {
         return new Promise((resolve) => {
@@ -168,11 +220,48 @@ export default class Database {
         });  
       }
 
+      updateExpense(expense) {
+        return new Promise((resolve) => {
+          this.initDB().then((db) => {
+            db.transaction((tx) => {
+              tx.executeSql('UPDATE expenses SET  cId = ?, eName = ?, desc = ? WHERE eId = ?', [expense.cId, expense.eName, expense.desc, expense.eId]).then(([tx, results]) => {
+                resolve(results);
+              });
+            }).then((result) => {
+              this.closeDatabase(db);
+            }).catch((err) => {
+              console.log(err);
+            });
+          }).catch((err) => {
+            console.log(err);
+          });
+        });  
+      }
+
       deleteCategory(id) {
         return new Promise((resolve) => {
           this.initDB().then((db) => {
             db.transaction((tx) => {
               tx.executeSql('DELETE FROM categories WHERE cId = ?', [id]).then(([tx, results]) => {
+                console.log(results);
+                resolve(results);
+              });
+            }).then((result) => {
+              this.closeDatabase(db);
+            }).catch((err) => {
+              console.log(err);
+            });
+          }).catch((err) => {
+            console.log(err);
+          });
+        });  
+      }
+
+      deleteExpense(id) {
+        return new Promise((resolve) => {
+          this.initDB().then((db) => {
+            db.transaction((tx) => {
+              tx.executeSql('DELETE FROM expenses WHERE eId = ?', [id]).then(([tx, results]) => {
                 console.log(results);
                 resolve(results);
               });

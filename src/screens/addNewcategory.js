@@ -65,27 +65,6 @@ export default class AddNewCateogry extends React.Component {
                     console.log(err);
                 })
             }
-            // var db = SQLite.openDatabase({ name: "expense.db", createFromLocation: 1 });
-            // if(this.state.isUpdateCall == false){
-            //     db.executeSql("INSERT INTO categories (c_name, desc) VALUES (?,?)", [this.state.cname, this.state.desc], (db, res) =>{
-
-            //         if (db.insertId) {
-            //             this.props.navigation.state.params.getRefreshdata();
-            //             this.props.navigation.pop();
-            //         }
-            //     },  (e) =>{
-            //         console.log("ERROR: " + e.message);
-            //     });
-            // }else{
-            //     db.executeSql('UPDATE categories SET c_name = ?, desc = ? WHERE c_id = ? ', [ this.state.cname, this.state.desc, this.state.cId ], (db,results)=>{
-            //         if (db.rowsAffected) {
-            //             this.props.navigation.state.params.getRefreshdata();
-            //             this.props.navigation.pop();
-            //         }
-            //     }, (e) =>{
-            //         console.log("ERROR: " + e.message);
-            //     });
-            // }
         } else {
             alert('Please Enter Category name');
         }
