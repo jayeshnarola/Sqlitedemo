@@ -43,7 +43,7 @@ export default class Database {
                       console.log("Database not yet ready ... populating data");
                       db.transaction((tx) => {
                           tx.executeSql('CREATE TABLE IF NOT EXISTS categories (cId INTEGER PRIMARY KEY AUTOINCREMENT, cName TEXT NOT NULL, desc TEXT)');
-                          tx.executeSql('CREATE TABLE IF NOT EXISTS expenses (eId INTEGER PRIMARY KEY AUTOINCREMENT,cId INTEGER NOT NULL, eName TEXT NOT NULL, desc TEXT)');
+                          tx.executeSql('CREATE TABLE IF NOT EXISTS expenses (eId INTEGER PRIMARY KEY AUTOINCREMENT,cId INTEGER NOT NULL, eName TEXT NOT NULL,amount INTEGER NOT NULL, desc TEXT)');
                       }).then(() => {
                           console.log("Table created successfully");
                       }).catch(error => {
@@ -116,16 +116,17 @@ export default class Database {
           const expenses = [];
           this.initDB().then((db) => {
             db.transaction((tx) => {
-              tx.executeSql('SELECT eId, cId, eName, desc FROM expenses', []).then(([tx,results]) => {
+              tx.executeSql('SELECT e.eId, e.cId, e.eName, e.amount, e.desc FROM expenses as e, categories as c where c.cId == e.cId', []).then(([tx,results]) => {
                 console.log("Query completed");
                 var len = results.rows.length;
                 for (let i = 0; i < len; i++) {
                   let row = results.rows.item(i);
-                  const { eId, cId, eName, desc } = row;
+                  const { eId, cId, eName, amount, desc } = row;
                   expenses.push({
                     eId,
                     cId,
                     eName,
+                    amount,
                     desc
                   });
                 }
@@ -187,7 +188,7 @@ export default class Database {
         return new Promise((resolve) => {
           this.initDB().then((db) => {
             db.transaction((tx) => {
-              tx.executeSql('INSERT INTO expenses VALUES (?, ?, ?, ?)',[ null, expense.cId, expense.eName, expense.desc]).then(([tx, results]) => {
+              tx.executeSql('INSERT INTO expenses VALUES (?, ?, ?, ?, ?)',[ null, expense.cId, expense.eName, expense.amount, expense.desc]).then(([tx, results]) => {
                 resolve(results);
               });
             }).then((result) => {
@@ -224,7 +225,7 @@ export default class Database {
         return new Promise((resolve) => {
           this.initDB().then((db) => {
             db.transaction((tx) => {
-              tx.executeSql('UPDATE expenses SET  cId = ?, eName = ?, desc = ? WHERE eId = ?', [expense.cId, expense.eName, expense.desc, expense.eId]).then(([tx, results]) => {
+              tx.executeSql('UPDATE expenses SET  cId = ?, eName = ?, amount = ?, desc = ? WHERE eId = ?', [expense.cId, expense.eName, expense.amount, expense.desc, expense.eId]).then(([tx, results]) => {
                 resolve(results);
               });
             }).then((result) => {

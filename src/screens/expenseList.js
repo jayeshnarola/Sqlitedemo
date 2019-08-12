@@ -47,7 +47,7 @@ export default class ExpenseList extends Component {
     getExpenseList() {
         let expenses = [];
         db.listExpense().then((data) => {
-            expenses = data;
+            expenses = data;     
             this.setState({ expenseList: expenses, searchExpenseList: expenses })
             this.setState({ isFetching: false })
             if (this.state.expenseList.length == 0) {
@@ -94,7 +94,10 @@ export default class ExpenseList extends Component {
                     </View>
                 </View>
                 <View>
-                    <Text style={{ marginLeft: 10, fontSize: 13, marginVertical: 5 }}>{item.item.desc}</Text>
+                    <Text style={{ marginLeft: 10, fontSize: 13, marginVertical: 5 }}>Amount: {item.item.amount}</Text>
+                </View>
+                <View>
+                    <Text style={{ marginLeft: 10, fontSize: 13, marginVertical: 5 }}>Desc: {item.item.desc}</Text>
                 </View>
             </View>
         )
